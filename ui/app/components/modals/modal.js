@@ -28,6 +28,7 @@ import ConfirmCustomizeGasModal from './customize-gas'
 import CancelTransaction from './cancel-transaction'
 import WelcomeBeta from './welcome-beta'
 import TransactionDetails from './transaction-details'
+import ClearApprovedOrigins from './clear-approved-origins'
 
 const modalContainerBaseStyle = {
   transform: 'translate3d(-50%, 0, 0px)',
@@ -201,6 +202,23 @@ const MODALS = {
 
   BETA_UI_NOTIFICATION_MODAL: {
     contents: h(WelcomeBeta),
+    mobileModalStyle: {
+      ...modalContainerMobileStyle,
+    },
+    laptopModalStyle: {
+      ...modalContainerLaptopStyle,
+    },
+    contentStyle: {
+      borderRadius: '8px',
+    },
+  },
+
+  CLEAR_APPROVED_ORIGINS_SUCCESS: {
+    contents: [
+      h(Notification, [
+        h(ClearApprovedOrigins),
+      ]),
+    ],
     mobileModalStyle: {
       ...modalContainerMobileStyle,
     },
