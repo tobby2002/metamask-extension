@@ -1,4 +1,5 @@
 const ObservableStore = require('obs-store')
+const extension = require('extensionizer')
 
 /**
  * A controller that services user-approved requests for a full Ethereum provider API
@@ -68,6 +69,7 @@ class ProviderApprovalController {
    */
   clearApprovedOrigins () {
     this.approvedOrigins = {}
+    extension.storage.local.set({ forcedOrigins: [] })
   }
 
   /**
@@ -77,7 +79,18 @@ class ProviderApprovalController {
    * @returns {boolean} - True if the origin has been approved
    */
   isApproved (origin) {
-    return this.approvedOrigins[origin]
+    return new Promise(resolve => {
+      extension.storage.local.get(['forcedOrigins'], ({ forcedOrigins = [] }) => {
+        resolve(this.approvedOrigins[origin] || forcedOrigins.indexOf(origin) > -1)
+      })
+    })
+  }
+
+  /**
+   * Called when a user forces the exposure of a full Ethereum provider API
+   */
+  forceInjection () {
+    this.platform.sendMessage({ action: 'force-injection' }, { active: true })
   }
 }
 
